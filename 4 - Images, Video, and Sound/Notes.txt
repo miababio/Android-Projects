@@ -1,0 +1,367 @@
+                                    NOTES
+                                    -----
+                                    
+Layouts
+    - Relative Layout
+        - Things are positioned relative to the screen
+                                --------
+            - Ex: Place a button on the bottom left corner -> It'll stay at that corner, no matter what screen size you have
+    - Just like moving stuff around in the Design tab, you can do everything programmmatically, through the "Text" tab
+        - Located at bottom of Android Studio
+        - XML Format
+        - Pretty self explanatory, even includes autocompletion
+    - Advantage of Text tab -> It's easy to copy elements and just change it's ID/location if you want
+        - Ex: Copy a Button, and change the android:layout_below="@+id/button" (the first button)
+    - LinearLayout
+        - Use to keep elements horizontal or vertical of each other (depending on which one you picked)
+        - Ex: Horizontal Linear Layout -> Put two buttons next to each other in the center
+            - See Example 1
+    - Just an observation, but using all these layouts together is similar to what you did with Qt...keep that in mind. It might help when designing things later
+    
+Fading Animations
+    - Use the animate() method
+        - Found in ImageView
+        - Specify the alpha (0 = transparent, 1 = opaque), and the duration (ms)
+        
+        - Ex: ImageView img = (ImageView)findViewById(R.id.imgMe);
+              img.animate().alpha(0f).setDuration(2000);
+              
+              - for alpha, you could put 0 and it still works, but the f specifies it's a float
+              - Other numbers you want the f, otherwise the parameter assumes you put in a double
+              
+        - Crossfading: Taking two images and fading one in while the other fades out
+          -----------
+        
+Other Animations
+    - translationYBy -> Move an image on the y-axis by a value (float)
+        - Ex: img.animate().translationYBy(1000f).setDuration(2000);
+    - translationXBy -> "                  " x-axis "                 "
+        - Ex: img.animate().translationXBy(-1500f).setDuration(2000);
+    - Sometimes we may want to slide an image in (Ex: start app w/ image off screen)
+        - setTranslationX(<float>) method
+            - Immediately moves image w/o any animation
+    - rotation(float) -> rotate an image by degrees
+        - Ex: img.animate().rotation(180f).setDuration(2000);
+    - scaleX(float), scaleY(float) -> Can scale an image by a certain percent (float, 0-1)
+        - Ex: img.animate().scaleX(0.5f).scaleY(0.5f).setDuration(2000);
+        - Note that you can also chain animation functions (similar to javascript)
+        - Also note: The center point of the image is maintained
+            - IF you shrink/grow the image, it's always at the center
+    - Last Note: translationX() vs translationXBy()
+        - It seems that translationX moves the image to the actual coordinate of the screen, whereas translationXBy moves the image relative to where it currently is
+              --------
+
+Game: Connect 3
+    - Google Nexus 4 (ImageView Layout)
+        - First row (left to right) Left, Top, Bottom, Right
+            - 10, 10, 10, 10
+            - 25, 10, X, X
+            - 25, 10, X, X
+            
+        - Second Row
+            - 10, 24, X, X
+            - 25, 24, X, X
+            - 25, 24, X, X
+            
+        - Third Row
+            - 10, 30, X, X
+            - 25, 30, X, X
+            - 25, 30, X, X
+
+    - Google Nexus 5 (ImageView Layout)
+        - First row (left to right) Left, Top, Bottom, Right
+            - 10, 10, 10, 10
+            - 13, 10, X, X
+            - 20, 10, X, X
+            
+        - Second Row
+            - 10, 24, X, X
+            - 13, 24, X, X
+            - 20, 24, X, X
+            
+        - Third Row
+            - 10, 30, X, X
+            - 13, 30, X, X
+            - 20, 30, X, X
+    
+    - How to tell which ImageView has been tapped?
+        - Use the "tag" property to determine which one
+            - Ex: in activity_main Text view -> android:tag="0" // that imageview has a tag of 0 (top-left)
+        - Then use the getTag() method to return the tag you have
+            - Ex: counter.getTag().toString();
+    
+    - NOTE: In the Component Tree, the item thats on the bottom is the one that appears closest to the front of the screen
+        - In other words, the most bottom has the highest z-index
+        
+    - How to get the layout to display with the winning message?
+        - Get the layout by the ID
+        - Change the visibility with the setVisibility() function
+        
+        - Ex: LinearLayout layout = (LinearLayout)findViewById(R.id.playAgainLayout);
+              layout.setVisibility(View.VISIBLE);
+              
+    - Reset the game
+        - See Example 2
+            - setImageResource(0);
+                - 0 Sets the image in the ImageView to nothing (empty image)
+                
+Video
+    - First, you need to put a video where Android Studio can see it
+        - In the "res" folder
+            - Create a new one called "raw" or something
+        - Create the folder in Windows Explorer
+        - Drag video to there
+    - If you don't see the folder in Android Studio, click the "Synchronize" button (looks like Refresh symbol)
+    - Add a VideoView element to view videos
+    - Set the video path (where the video file is located) using the setVideoPath() function
+        - Ex: setVideoPath("android.resource://" + getPackageName() + "/" + R.raw.demovideo);
+            - NOTE: to get access to the resource path, use "android.resource://"
+            - We use getPackageName to get the current package of our app's location
+    - Once the path is set, you can call the start() method to start the video
+    - NOTE: Running video on the emulator doesn't work that great all the time; It's better to try on your own phone if possible
+    - This is fine and dandy, except right now if you run the app, you won't have any video controls
+        - To add them, we need to create a MediaController, and then attach the VideoView to it
+            - mediaController.setAnchorView(video);
+                - setAnchorView sets the mediacontroller's view to the videoView
+            - You have to do it the other way around as well -> Attach the VideoView's mediacontroller to the one we created
+                - video.setMediaController(mediaController);
+        - Tap the video to see the controls
+            - We get the basic controls (pause, skip forward/backward)
+    - Can also do online videos as well (need to look into later)
+        - setVideoPath(<pass in URL to video?>)
+        - Youtube wont work automatically; Need to use the YouTube API for Android if you want Youtube videos
+    - NOTE: If video doesn't play with setVideoPath(), you can also try the setURI() method:
+        - Ex: demoVideo.setURI(URI.parse("android.resource:// + getPackageName() + "/" + R.raw.demovideo));
+
+Controlling Audio
+    - Create "raw" folder
+        - Put mp3, ogg file in raw folder
+    - Only need 2 lines of code to get it playing!
+        - MediaPlayer mPlayer = MediaPlayer.create(this, R.raw.credits);
+          mPlayer.start();
+        
+        - looks similar to starting a video 
+    - To pause, use the pause() method
+
+Audio: Volume and Seeking
+    - Add a SeekBar to control volume level
+        - NOTE: SeekBar vs. SeekBar (Discrete)
+            - Still need to look into it, but I guess SeekBar (Discrete) let's you customize the SeekBar to specific intervals, while the regular SeekBar doesn't.
+            - In other words, Seekbar discrete can have notches of 10, 20, 30, up to 100 for example. Regular Seekbar can't (will confirm later)
+    - To interact with the SeekBar, we need to add an OnSeekBarChangeListener to it, and Override the OnProgressChanged() method
+    - onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
+        - seekBar: See if the SeekBar has moved
+        - progress: Value that the SeekBar is currently at
+        - fromUser: Tells whether or not the user changed the SeekBar, or if it was updated by code
+    - Other methods that need to be overidden:
+        - onStartTrackingTouch(SeekBar seekBar) -> Activates when the user begins to start using the SeekBar
+        - onStopTrackingTouch(SeekBar seekBar) -> Activates when the user stops using the SeekBar after starting to use it
+    - To manage the audio, we need an AudioManager to interface with Android's audio system, to control volume, integrate with our seekbar, etc.
+        - Have to establish the maximum phone volume, aas well as the current volume for the phone (AudioManager)
+        - Then, set the SeekBar's max and current volume using the values from AudioManager
+        - Finally, in the changeListener, chage the AudioManager's streamVolume to the seekbar's progress
+    - See Example 4
+
+Grid Layouts
+    - Set up for the Phrases App
+    - 2 colums w/ 4 buttons each
+    - in the XML you can specify
+        - android:layout_column="0"
+          android:layout_row="0"
+          android:layout_gravity="fill"
+          android:layout_columnWeight="1"
+            - the "fill" will expand the button both vertically and horizontally until it reaches the width of the next button
+            - columnWeight gives each button the same weight
+                - Theres also a columnSpan, so you could have a single button span 2+ columns, but we don't want that right now
+ 
+App Basic Phrases
+    - In the Text design view, you can add html codes to add features to the text
+        - Ex: <Button
+                 android:text="Do you &#10; speak English?"
+                 
+            - &#10; -> HTML code for a Line Break
+                
+    
+    
+ 
+                                  Examples
+                                  --------
+                            
+Example 1 - Layout w/in a Layout
+---------
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.shadow.layouts.MainActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello Mike!"
+        android:id="@+id/textView" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true">
+
+        <Button
+            android:text="Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button" />
+
+        <Button
+            android:text="Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button2" />
+    </LinearLayout>
+
+</RelativeLayout>
+
+
+Example 2 - Reset Connect 3
+---------
+public void playAgain()
+{
+    LinearLayout layout = (LinearLayout)findViewById(R.id.playAgainLayout);
+    layout.setVisibility(View.INVISIBLE);
+
+    activePlayer = 0;
+    Arrays.fill(gamestate, UNPLAYED);
+
+    GridLayout board = (GridLayout)findViewById(R.id.gridBoard);
+    for(int i = 0; i < board.getChildCount(); i++) // getChildCount() -> Tells you how many views are in the layout
+    {
+        ((ImageView)board.getChildAt(i)).setImageResource(0); // 0 = Empty Image
+    }
+}
+
+
+Example 3 - Video setup
+---------
+VideoView video = (VideoView)findViewById(R.id.videoView);
+video.setVideoPath("android.resource://" + getPackageName() + "/" + R.raw.demovideo);
+MediaController mediaController = new MediaController(this);
+mediaController.setAnchorView(video);
+video.setMediaController(mediaController);
+video.start();
+
+
+Example 4 - Creating a Volume Slider
+---------
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+
+    mPlayer = MediaPlayer.create(this, R.raw.credits);
+
+    audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+    int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC); // Stream to play music for apps
+    int currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+
+    SeekBar volumeControl = (SeekBar)findViewById(R.id.seekBar);
+    volumeControl.setMax(maxVolume); // Was 100 by default, now will be set to max volume of phone
+    volumeControl.setProgress(currentVolume);
+
+    volumeControl.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            Log.i("SeekBar Value", Integer.toString(progress));
+            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, progress, 0);
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+
+        }
+    });
+}
+
+Extra - Change Volume with Rocker Buttons
+-----------------------------------------
+
+    Method #1
+    ---------
+    NOTE: This first way works, but you dont see the system Media seekbar at the top when you return true for both of the if statements. If you want to see the Media seekbar (and that it's off by 1), change both to return false.
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
+        {
+            int index = volumeControl.getProgress();
+            volumeControl.setProgress(index - 1);
+            return true;
+        }
+        else if(keyCode == KeyEvent.KEYCODE_VOLUME_UP)
+        {
+            int index = volumeControl.getProgress();
+            volumeControl.setProgress(index + 1);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    Method #2
+    ---------
+    NOTE: You have to return false for both if statements for this one, otherwise you cant use any other system buttons on the phone.
+    ISSUE: Just discovered when you first click up, the seekbar moves down, then up the second time. Vice-versa actions when you click volume down. weird...
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        int currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
+        {
+            volumeControl.setProgress(currentVolume);
+            return false;
+        }
+        else if(keyCode == KeyEvent.KEYCODE_VOLUME_UP)
+        {
+            volumeControl.setProgress(currentVolume);
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+    
+Extra - Automatic SeekBar movement with song
+--------------------------------------------
+private Runnable moveMusicSeekBarThread = new Runnable() {
+    @Override
+    public void run()
+    {
+        if(mPlayer.isPlaying())
+        {
+            int position = mPlayer.getCurrentPosition();
+            musicControl.setProgress(position);
+            Log.i("Current Time", Integer.toString(position / 1000));
+        }
+        handler.postDelayed(this, 1000);
+    }
+};
+
+public void startSound(View view)
+    {
+        mPlayer.start();
+        moveMusicSeekBarThread.run();
+    }
+    
+
+Example 5 - 
+---------
