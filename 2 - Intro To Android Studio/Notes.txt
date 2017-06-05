@@ -1,0 +1,115 @@
+                                    NOTES
+                                    -----
+                                    
+Android Studio Overview
+    - Setting up a new project
+        - Start w/ "Empty Activity" for now
+        - Activity = "screen" in Android lingo
+    - To look at project, open Project tab on the top left
+        - Contains "app" folder, containing your code, layout, etc.
+        - Contains Gradle Scripts, which is used to build your android project
+    - Expand app folder, there contains 3 folders
+        - "manifests": Has the AndroidManifest.xml file; Describes details about our app (icon, labels, app name, etc.)
+        - "java": Java code for our app 
+            - Includes 2 test folders (leave for now)
+            - MainActivity.java
+                - Where the main code is for our app to get it working
+        - "res": Short for "Resources"; Here we put images, sounds, music, etc. for our app
+            - res->layout->activity_main.xml
+                - This is where you can design your screen (like visual studio)
+                - Stuff you can add is on the left (Toolbox)
+                - Component Tree is on the bottom; Lets you select elements within the screen (like Visual Studio)
+                - Properties section
+
+Formatting Text
+    - Click on text to change its properties
+    - ID = variable name 
+    - Instant Run
+        - New to Android v2.1+, instant run relaods your emulator...well...almost instantly!
+        - Ex: "Hello Michael!" -> run emulator
+            - Change text to "Hello John!"
+            - Notice Play button has a lightning bolt
+                - Click it and check emulator -> phone now updates to "Hello John!" almost instantly
+        - NOTE: Instant run only updates the current Activity (screen); That way you don't have to reload the whole entire app,
+                                                     --------
+        only just the screen
+    - TextViews
+        - Almost like Labels in Visual Studio
+        - Can put it anywhere on the screen
+            - Even if you change phone types, it keeps its relative position
+            - Ex: put a textview in the middle (horizontally and vertically), and then change the phone type (tablet)
+        - Some of its properties
+            - layout:width -> wrap_content, fill_parent (have to type in), match_parent
+                - wrap_content: layout of the textview is as big as the content (text)
+                - fill_parent: fills the textview to its parent, which in this case is the relative layout
+                - match_parent: similar to fill_parent (add more specifics to this later)
+            - layout:margin -> adds margins to the textview
+                - In this Android Studio version, the properties are located in the Layout_Margin dropdown
+                - Measured in dp
+                    - dp: "Density-independent Pixel"; 1/160 of an inch
+                        - 160 dp ~= 1 inch
+                    - If you ever want to be more precise, you can also enter a value in pixels (px), but that's generally frowned upon, because it doesn't scale well on other devices
+            - style -> Here you can change the color, margin, layout, etc. of a widget by giving it a style from a huuuuge list of styles
+            - alpha -> change transparency of an element
+            - background -> change background colors of the screen, elements
+                - changing the alpha also changes the brightness of the color
+            - gravity -> How you align your element content within the element itself
+                - Ex: Select tevtview and under gravity, check "right" -> moves content to the right
+                - Can also do filling, clipping
+            - textColor
+                - For colors, in this version of Android Studio, you'll have to make custom colors all the time -_-
+                    - I guess it makes better organization, but still...
+            - textSize -> Change size of text (should use sp)
+                - NOTE: this is in "sp" or, "Scale-independent Pixel"; Same as dp, but it's also afftected by the text zoom level
+
+Buttons
+    - onClick property -> Sets a function to execute when the button is clicked
+        - Pretty much like the Clicked event in Visual Studio, except you make the fuction first, and then assign it to the onClick
+    - A button is actually a type of View. Anything you can see on the screen is some type of View (textview, imageview, checkbox, etc.)
+    - Print information to the console (Run, Android Monitor tabs)
+        - Log.i(tag<string>, msg<string>)
+            - i = info
+            - There are other letters as well (d = debug, e = error, etc.)
+
+TextFields
+    - Old Android Studio, it showed up as a small square and you had to change layout_width to match_parent; Now, it's fine to keep at wrap_content, becuase it defaults with content in it
+    - "hint" property -> This is where you put the semi-transparent placeholder text to give hint's o nwhat should be entered there (Ex: Enter your name...)
+    - Exercise: Getting name from input and displaying it
+        - EditText name = (EditText)findViewById(R.id.txtName);
+            - Anytime you want to get a type of View (or someting) from an activity, you need to cast it
+            - R = "Resources"
+        - To display text in the logs -> Log.i("Info", name.getText().toString());
+
+Displaying Messages
+    - Toast
+        - Method of displaying messages to the screen
+        - The idea is that it sort of "pops up" like toast does
+    - Toast(<where you want it to appear>, <text you want to show>, <length of the toast>).show()
+        - Ex: Toast.makeText(this, "Hi there!", Toast.LENGTH_SHORT).show();
+
+Images
+    - Go in res->drawable folder
+        - NOTE: filenames can ONLY be a-z, 0-9, or underscore. NO CAPS!
+    - ImageView
+        - Way to show images
+        - In this version of Android Studio, it makes you pick a "src", or background image before you can continue
+        - NOTE: If you first add an image with a capital letter (Ex: "Android.png"), and then rename it to lowercase (android.png), make sure that in activity_main.xml, it changed it to lowercase as well. Just trying to run things, it still thought that the drawable was Android instead of android, and it hated me :'(
+        - Change an image example
+            - ImageView image = (ImageView)findViewById(R.id.imageView);
+            - image.setImageResource(R.drawable.me);
+        - scaleType property -> Determines how the image is scaled within the container
+            - Ex: FitXY -> stretches the image to the full size of the container
+                - FitStart -> Fits the image to the top and left of the container
+                - Fit Center -> fits th eimage in its correct resolution to the center of the container
+                - FitEnd -> Fits the image to the right sode of the container
+                    - Thin kof all the like align left, align center, and align right in Microsoft Word
+        -          
+    
+    
+ 
+                                  Examples
+                                  --------
+                            
+Example 1 - 
+---------
+
